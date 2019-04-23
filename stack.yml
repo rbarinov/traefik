@@ -1,0 +1,25 @@
+version: "3.7"
+
+services:
+  traefik:
+    image: traefik
+    command: --web \
+      --docker \
+      --docker.swarmmode \
+      --docker.watch
+    ports:
+      - 80:80
+      - 8080:8080
+    networks:
+      - proxy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    deploy:
+      mode: global
+      placement:
+        constraints:
+          - node.role == manager
+
+networks:
+  proxy:
+    driver: overlay
