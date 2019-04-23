@@ -1,0 +1,22 @@
+version: '3.7'
+
+services:
+  api:
+    image: nginx:alpine
+    networks:
+      - traefik_proxy
+    deploy:
+      replicas: 2
+      labels:
+        - "traefik.port=80"
+        - "traefik.frontend.rule=Host:any.server.com"
+        - "traefik.docker.network=traefik_proxy"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "30m"
+        max-file: "10"
+
+networks:
+  traefik_proxy:
+    external: true
